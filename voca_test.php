@@ -1,3 +1,7 @@
+    <head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    </head>
 <?php
 
     $ini_array = parse_ini_file("dbconnect.ini", true);
@@ -36,12 +40,19 @@
         $list_answer_Kor = [];
         $q_answer_strEng = "";
         $str_answer = "";
-
+        ?>
+        <div style="width: 500px; float:none; margin:0 auto">
+        <div class="card mx-5 mt-5 mb-5">
+        <?php
         while($row = mysqli_fetch_array($query_answer_result)){
             $q_answer_strEng = $row['strEngVoca'];
             $q_answer_strKor = $row['strKorVoca'];
-            $list_answer_Kor = explode(", ", $q_answer_strKor);
-            printf("%s </br>", $q_answer_strEng);
+            $list_answer_Kor = explode(", ", $q_answer_strKor);?>
+            <h5 class="card-header">
+                <?php printf("%s </br>", $q_answer_strEng); ?>
+            </h5>
+            <div class="card-body">
+            <?php
             
             $random_int = rand(0, count($list_answer_Kor)-1);
             if(in_array($random_int, $already_list)){
@@ -52,15 +63,22 @@
                 $already_list.array_push($already_list);
             }
 
-            $str_answer = "<input type='radio' name='radio_btn".$k."' value='".$list_answer_Kor[$random_int]."'>".$list_answer_Kor[$random_int];
+            $str_answer = "
+            <div class='form-check'>
+                <label class='btn btn-link'>
+                <input type='radio' class='btn-check' name='radio_btn".$k."' id='radio_btn".$k."' value='".$list_answer_Kor[$random_int]."'>
+                $list_answer_Kor[$random_int]
+                </label>
+            </div>";
+
             echo "<input type='hidden' name='answer".$k."' value='".$q_answer_strKor."'>";
             echo "<input type='hidden' name='eng_answer".$k."' value='".$q_answer_strEng."'>";
             $random_int_answer = rand(0, 4);
         }
-
+        
         for($i=0; $i<5; $i++){
             if($i == $random_int_answer){
-                printf("%s </br>", $str_answer);
+                printf("%s", $str_answer);
             }
             else{
                 $random_int = rand(1, $q_intNumberCount);
@@ -81,14 +99,29 @@
                         $already_list.array_push($already_list);
                     }
                     #echo $list_Kor[$random_int];
-                    printf("<input type='radio' name='radio_btn".$k."' value='%s'>%s", $list_Kor[$random_int], $list_Kor[$random_int]);
-                    printf("</br>");
+                    ?>
+                    <div class='form-check'>
+                        <label class='btn btn-link'>
+                            <input type='radio' class='btn-check' name='radio_btn<?php echo $k ?>' id='radio_btn<?php echo $k ?>' value='<?php echo $list_Kor[$random_int]?>'>
+                            <?php echo $list_Kor[$random_int]?>
+                        </label>
+                    </div>
+                    <?php
                 }
             }
         }
+        ?>
+            </div>
+        </div>
+        </div>
+        <?php
     }
     ?>
-        <input type="submit" value="제출">
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <input type="submit" class="btn btn-outline-success" value="제출">
+        </li>
+    </ul>
     </form>
     <?php
     //----------------------------------------------//
