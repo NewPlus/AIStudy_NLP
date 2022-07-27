@@ -1,4 +1,4 @@
-# VocabularySite
+# AIStudy_NLP
 - 간단히 만들어 본 사이트입니다!
 - 그저 단순하게 PHP로 영단어를 공부하기 위해 단어를 등록하고, 시험치르고, 점수 확인하고 체크하는 그런 웹 사이트입니다.
 - 사용기술 : PHP, MySQL, Bootstrap
