@@ -1,4 +1,5 @@
 # AIStudy_NLP
+<<<<<<< HEAD
 - 주요 기능
     - Voca : 단어장(틀린 개수 내림차순 정렬), 단어 등록, 시험지 생성 및 채점, 점수 및 정답 열람 / English-한국어 / PHP, MySQL / Normal Web
     - AIStudy : NLP를 활용한 공부용 웹 페이지
