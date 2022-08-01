@@ -1,2 +1,5 @@
 # Prerequisites
 *.ini
+*.npy
+fast_embedding_corpus
+fast_embedding_query

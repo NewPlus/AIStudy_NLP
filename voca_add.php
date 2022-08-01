@@ -1,3 +1,15 @@
+<?php
+    session_start();
+    if(empty($_SESSION['id'])) {
+        header('Location: signin.php');
+    }
+    else {
+        $u_id = $_SESSION['id'];
+        $u_name = $_SESSION['name'];
+        $_SESSION['id'] = $u_id;
+        $_SESSION['name'] = $u_name;
+    }
+?>
 <head>
 <title>English Voca Add</title>
         <!-- Bootstrap CSS -->
@@ -22,6 +34,7 @@
                 <input type="textbox" class="form-control mx-1 mt-1 mb-1" placeholder="Korean" name="kor_word">
             </label>
         </div>
+        <input type="hidden" value="<?php echo $u_id ?>" name="u_id">
         <input type="submit" class="btn btn-outline-success mx-1 mt-1 mb-1" value="제출">
     </form>
 </div>

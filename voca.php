@@ -1,3 +1,15 @@
+<?php
+    session_start();
+    if(empty($_SESSION['id'])) {
+        header('Location: signin.php');
+    }
+    else {
+        $u_id = $_SESSION['id'];
+        $u_name = $_SESSION['name'];
+        $_SESSION['id'] = $u_id;
+        $_SESSION['name'] = $u_name;
+    }
+?>
 <html>
     <head>
         <title>My English Voca</title>
@@ -24,7 +36,7 @@
       }
 </script>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top d-flex justify-content-between">
-            <a class="navbar-brand" href="#">English Vocabulary</a>
+            <a class="navbar-brand" href="#"><?php echo $u_name ?>'s English Vocabulary</a>
             <input onkeyup="filter()" id="value" class="form-control col-5" type="search" placeholder="Search" aria-label="Search">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -41,12 +53,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="voca_add.php">Add Voca</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+
                 <li class="nav-item dropdown disabled">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+                    AIStudy
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="aistudy/aistudy.php">MemorAIze Test</a>
                     <a class="dropdown-item" href="#">Another action</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something else here</a>
@@ -60,6 +76,7 @@
             </nav>
 
 <?php
+
 	$ini_array = parse_ini_file("dbconnect.ini", true);
     $host = $ini_array['DOTHOME']['HOST'];
     $dbuser = $ini_array['DOTHOME']['USER'];
@@ -67,7 +84,7 @@
     $dbname = $ini_array['DOTHOME']['DBNAME'];
 
     $conn = new mysqli($host, $dbuser, $dbpw, $dbname);
-    $querys = "select * from t_voca_eng_kor order by intWrong desc;";
+    $querys = "select * from t_voca_eng_kor where strId = '".$u_id."' order by intWrong desc;";
 
     // 어휘집 전체 보기                              //
     

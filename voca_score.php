@@ -1,4 +1,16 @@
-    <head>
+<?php
+    session_start();
+    if(empty($_SESSION['id'])) {
+        header('Location: signin.php');
+    }
+    else {
+        $u_id = $_SESSION['id'];
+        $u_name = $_SESSION['name'];
+        $_SESSION['id'] = $u_id;
+        $_SESSION['name'] = $u_name;
+    }
+?>
+<head>
         <title>Score Board</title>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -12,7 +24,7 @@
     $dbname = $ini_array['DOTHOME']['DBNAME'];
 
     $conn = new mysqli($host, $dbuser, $dbpw, $dbname);
-    $querys = "select intWrong from t_voca_eng_kor;";
+    $querys = "select intWrong from t_voca_eng_kor where strId = '".$u_id."';";
 
     $answer_cnt = 0;
     for($i=0; $i<10; $i++){
@@ -52,7 +64,7 @@
             while($row = mysqli_fetch_array($query_result)){
                 $q_intWrong = $row['intWrong'] + 1;
             }
-            $querys = "UPDATE t_voca_eng_kor SET intWrong=".$q_intWrong." WHERE strEngVoca = '".$real_eng_answer."';";
+            $querys = "UPDATE t_voca_eng_kor SET intWrong=".$q_intWrong." WHERE strEngVoca = '".$real_eng_answer."' AND strId = '".$u_id."';";
             $query_result = mysqli_query($conn, $querys);
             ?>
                 </div>

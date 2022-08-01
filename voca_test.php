@@ -1,4 +1,18 @@
-    <head>
+
+<?php
+
+    session_start();
+    if(empty($_SESSION['id'])) {
+        header('Location: signin.php');
+    }
+    else {
+        $u_id = $_SESSION['id'];
+        $u_name = $_SESSION['name'];
+        $_SESSION['id'] = $u_id;
+        $_SESSION['name'] = $u_name;
+    }
+?>
+<head>
         <title>My English Test</title>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -12,7 +26,7 @@
     $dbname = $ini_array['DOTHOME']['DBNAME'];
 
     $conn = new mysqli($host, $dbuser, $dbpw, $dbname);
-    $querys = "select * from t_voca_eng_kor;";
+    $querys = "select * from t_voca_eng_kor where strId = '".$u_id."';";
     
     // 어휘 랜덤 문제                              //
     ?>
@@ -20,7 +34,7 @@
     <?php
     $already_list = [];
     for($k=0; $k<10; $k++){
-        $querys = "select count(*) from t_voca_eng_kor;";
+        $querys = "select count(*) from t_voca_eng_kor where strId = '".$u_id."';";
         $query_result = mysqli_query($conn, $querys);
         $random_int = 0;
         $q_intNumberCount = 0;
@@ -28,15 +42,17 @@
             $q_intNumberCount = $row['count(*)'];
             $random_int = rand(1, $q_intNumberCount);
             if(in_array($random_int, $already_list)){
-                $already_list.array_push($already_list);
+                $already_list.array_push($already_list, $random_int);
             }
             else{
                 $random_int = rand(1, $q_intNumberCount);
-                $already_list.array_push($already_list);
+                $already_list.array_push($already_list, $random_int);
             }
+            
         }
+        
+        $querys_answer = "select * from t_voca_eng_kor where strId = '".$u_id."' LIMIT ".$random_int.",1;";
 
-        $querys_answer = "select * from t_voca_eng_kor where intNumber=".$random_int.";";
         $query_answer_result = mysqli_query($conn, $querys_answer);
         $list_answer_Kor = [];
         $q_answer_strEng = "";
@@ -45,6 +61,7 @@
         <div style="width: 500px; float:none; margin:0 auto">
         <div class="card mx-5 mt-5 mb-5">
         <?php
+        $random_int_answer = 0;
         while($row = mysqli_fetch_array($query_answer_result)){
             $q_answer_strEng = $row['strEngVoca'];
             $q_answer_strKor = $row['strKorVoca'];
@@ -83,7 +100,7 @@
             }
             else{
                 $random_int = rand(1, $q_intNumberCount);
-                $querys = "select * from t_voca_eng_kor where intNumber=".$random_int.";";
+                $querys = "select * from t_voca_eng_kor where strId = '".$u_id."' LIMIT ".$random_int.",1;";
                 $query_result = mysqli_query($conn, $querys);
                 while($row = mysqli_fetch_array($query_result)){
                     $q_strEng = $row['strEngVoca'];
@@ -94,10 +111,11 @@
                     $random_int = rand(0, count($list_Kor)-1);
                     if(in_array($random_int, $already_list)){
                         $random_int = rand(0, count($list_Kor)-1);
+                        $already_list.array_push($already_list,$random_int);
                     }
                     else{
                         $random_int = rand(0, count($list_Kor)-1);
-                        $already_list.array_push($already_list);
+                        $already_list.array_push($already_list,$random_int);
                     }
                     #echo $list_Kor[$random_int];
                     ?>
